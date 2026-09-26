@@ -58,10 +58,10 @@ phases:
 
       - 'echo "Updating Kubernetes deployment image..."'
 
-      - 'sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/deployment.yaml'
+      - 'sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" K8s/deployment.yaml'
 
       - 'echo "Kubernetes deployment file:"'
-      - 'cat k8s/deployment.yaml'
+      - 'cat K8s/deployment.yaml'
 
       - 'echo "Applying Deployment..."'
 
