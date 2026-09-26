@@ -4,93 +4,93 @@ phases:
 
   install:
     commands:
-      - echo "=========================================="
-      - echo "Installing kubectl"
-      - echo "=========================================="
+      - 'echo "=========================================="'
+      - 'echo "Installing kubectl"'
+      - 'echo "=========================================="'
 
-      - echo "Downloading kubectl..."
+      - 'echo "Downloading kubectl..."'
 
-      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
 
-      - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - 'install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl'
 
-      - echo "kubectl version:"
-      - kubectl version --client
+      - 'echo "kubectl version:"'
+      - 'kubectl version --client'
 
 
   pre_build:
     commands:
-      - echo "=========================================="
-      - echo "Connecting to EKS"
-      - echo "=========================================="
+      - 'echo "=========================================="'
+      - 'echo "Connecting to EKS"'
+      - 'echo "=========================================="'
 
-      - echo "AWS Region:"
-      - echo "$AWS_DEFAULT_REGION"
+      - 'echo "AWS Region:"'
+      - 'echo "$AWS_DEFAULT_REGION"'
 
-      - echo "EKS Cluster:"
-      - echo "$EKS_CLUSTER_NAME"
+      - 'echo "EKS Cluster:"'
+      - 'echo "$EKS_CLUSTER_NAME"'
 
-      - echo "Git Commit SHA:"
-      - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - 'echo "Git Commit SHA:"'
+      - 'echo "$CODEBUILD_RESOLVED_SOURCE_VERSION"'
 
-      - export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - 'export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION'
 
-      - echo "Image Tag:"
-      - echo "$IMAGE_TAG"
+      - 'echo "Image Tag:"'
+      - 'echo "$IMAGE_TAG"'
 
-      - echo "Updating kubeconfig..."
+      - 'echo "Updating kubeconfig..."'
 
-      - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $EKS_CLUSTER_NAME
+      - 'aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $EKS_CLUSTER_NAME'
 
-      - echo "Checking EKS connection..."
+      - 'echo "Checking EKS connection..."'
 
-      - kubectl get nodes
+      - 'kubectl get nodes'
 
 
   build:
     commands:
-      - echo "=========================================="
-      - echo "Deploying Application to EKS"
-      - echo "=========================================="
+      - 'echo "=========================================="'
+      - 'echo "Deploying Application to EKS"'
+      - 'echo "=========================================="'
 
-      - echo "Using Docker image:"
-      - echo "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
+      - 'echo "Using Docker image:"'
+      - 'echo "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"'
 
-      - echo "Updating Kubernetes deployment image..."
+      - 'echo "Updating Kubernetes deployment image..."'
 
-      - sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/deployment.yaml
+      - 'sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/deployment.yaml'
 
-      - echo "Kubernetes deployment file:"
-      - cat k8s/deployment.yaml
+      - 'echo "Kubernetes deployment file:"'
+      - 'cat k8s/deployment.yaml'
 
-      - echo "Applying Deployment..."
+      - 'echo "Applying Deployment..."'
 
-      - kubectl apply -f k8s/deployment.yaml
+      - 'kubectl apply -f k8s/deployment.yaml'
 
-      - echo "Applying Service..."
+      - 'echo "Applying Service..."'
 
-      - kubectl apply -f k8s/service.yaml
+      - 'kubectl apply -f k8s/service.yaml'
 
-      - echo "Waiting for deployment..."
+      - 'echo "Waiting for deployment..."'
 
-      - kubectl rollout status deployment/brain-tasks-app
+      - 'kubectl rollout status deployment/brain-tasks-app'
 
 
   post_build:
     commands:
-      - echo "=========================================="
-      - echo "Deployment Completed"
-      - echo "=========================================="
+      - 'echo "=========================================="'
+      - 'echo "Deployment Completed"'
+      - 'echo "=========================================="'
 
-      - echo "Pods:"
-      - kubectl get pods
+      - 'echo "Pods:"'
+      - 'kubectl get pods'
 
-      - echo "Deployment:"
-      - kubectl get deployment
+      - 'echo "Deployment:"'
+      - 'kubectl get deployment'
 
-      - echo "Service:"
-      - kubectl get service brain-tasks-service
+      - 'echo "Service:"'
+      - 'kubectl get service brain-tasks-service'
 
-      - echo "=========================================="
-      - echo "Application deployed successfully!"
-      - echo "=========================================="
+      - 'echo "=========================================="'
+      - 'echo "Application deployed successfully!"'
+      - 'echo "=========================================="'
