@@ -15,7 +15,6 @@ phases:
       - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
       - echo "kubectl version:"
-
       - kubectl version --client
 
 
@@ -41,9 +40,7 @@ phases:
 
       - echo "Updating kubeconfig..."
 
-      - aws eks update-kubeconfig \
-          --region $AWS_DEFAULT_REGION \
-          --name $EKS_CLUSTER_NAME
+      - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $EKS_CLUSTER_NAME
 
       - echo "Checking EKS connection..."
 
@@ -57,7 +54,6 @@ phases:
       - echo "=========================================="
 
       - echo "Using Docker image:"
-
       - echo "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
 
       - echo "Updating Kubernetes deployment image..."
@@ -69,11 +65,11 @@ phases:
 
       - echo "Applying Deployment..."
 
-      - kubectl apply -f K8s/deployment.yaml
+      - kubectl apply -f k8s/deployment.yaml
 
       - echo "Applying Service..."
 
-      - kubectl apply -f K8s/service.yaml
+      - kubectl apply -f k8s/service.yaml
 
       - echo "Waiting for deployment..."
 
